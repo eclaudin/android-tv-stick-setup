@@ -155,7 +155,26 @@ sudo systemctl enable --now syslog-ng
 
 ---
 
-## 5. Diagnóstico útil
+## 5. Hardware e Firmware
+
+### Especificações do chip
+- **SoC:** Allwinner H616 (`sun50iw9p1`)
+- **CPU:** ARMv8 64-bit (4x Cortex-A53)
+- **Android:** 13.1 — patch de segurança: 2019-12-05 (desatualizado)
+- **Build:** `titan_p1-userdebug 10 QP1A.191105.004 test-keys` — firmware não oficial
+- **Bootloader:** bloqueado (`ro.boot.flash.locked=1`, `verifiedbootstate=green`)
+
+### Atualização de firmware / ROM customizada
+Não há caminho oficial para atualização. O H616 tem comunidade ativa no XDA Developers — pesquisar por:
+- `Allwinner H616 Android 13 ROM`
+- `sun50iw9p1 custom ROM`
+- Dispositivos compatíveis: X96 Max+, Tanix TX6S, TX9S
+
+> **Atenção:** qualquer flash de ROM exige desbloquear o bootloader. Com bootloader bloqueado, o único caminho é via `dd` direto na partição usando root — risco de brick.
+
+---
+
+## 6. Diagnóstico útil
 
 ```bash
 # Verificar conectividade
