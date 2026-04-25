@@ -51,6 +51,8 @@ adb shell su -c "cp /sdcard/WifiConfigStore.xml /data/misc/wifi/WifiConfigStore.
 adb shell su -c "svc wifi disable" && sleep 2 && adb shell su -c "svc wifi enable"
 ```
 
+> **Atenção:** O Android pode sobrescrever o `WifiConfigStore.xml` após reboot. Se o stick migrar para o 5GHz novamente, repita o procedimento com o modo IoT do roteador ativo.
+
 ### Verificar se está no 2.4GHz
 ```bash
 adb shell dumpsys wifi | grep -a "mWifiInfo"
@@ -99,8 +101,7 @@ adb shell chmod +x /system/bin/fixbssid
 
 ## 3. Bloatware desabilitado
 
-Apps de fábrica chineses que rodavam em background consumindo CPU e rede:
-
+### Apps de fábrica chineses
 ```bash
 for pkg in \
   com.ik.installxapk \
@@ -109,6 +110,29 @@ for pkg in \
   com.softwinner.agingdragonbox \
   com.softwinner.dragonbox \
   com.softwinner.awlogsettings; do
+    adb shell pm disable-user --user 0 "$pkg"
+done
+```
+
+### Serviços desnecessários no TV stick
+```bash
+for pkg in \
+  com.android.phone \
+  com.android.server.telecom \
+  com.android.providers.telephony \
+  com.android.mms.service \
+  com.android.simappdialog \
+  com.android.se \
+  com.android.printspooler \
+  com.android.bips \
+  com.android.printservice.recommendation \
+  com.android.dreams.web \
+  com.android.hotspot2 \
+  com.softwinner.miracastReceiver \
+  com.android.bookmarkprovider \
+  com.android.music \
+  com.android.gallery3d \
+  com.android.egg; do
     adb shell pm disable-user --user 0 "$pkg"
 done
 ```
