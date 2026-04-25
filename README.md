@@ -57,6 +57,44 @@ adb shell dumpsys wifi | grep -a "mWifiInfo"
 # Deve mostrar Frequency: 2447MHz e BSSID: e8:45:8b:b8:a2:20
 ```
 
+### Persistência após queda de energia
+
+O Android pode sobrescrever o `WifiConfigStore.xml` ao reiniciar, zerando o BSSID. Para corrigir isso automaticamente no boot, foi instalado um serviço de sistema:
+
+**`/system/bin/fixbssid`** — script que verifica e reaplicar o BSSID se necessário:
+```sh
+#!/system/bin/sh
+sleep 10
+BSSID="e8:45:8b:b8:a2:20"
+CONF="/data/misc/wifi/WifiConfigStore.xml"
+if grep -q '<null name="BSSID" />' "$CONF"; then
+    svc wifi disable
+    sed -i 's|<null name="BSSID" />|<string name="BSSID">'"$BSSID"'</string>|' "$CONF"
+    svc wifi enable
+fi
+```
+
+**`/system/etc/init/fixbssid.rc`** — registra o serviço para rodar no boot:
+```
+on property:sys.boot_completed=1
+    start fixbssid
+
+service fixbssid /system/bin/fixbssid
+    disabled
+    oneshot
+    user root
+    group shell
+    seclabel u:r:shell:s0
+```
+
+Para instalar (requer `/system` gravável via `adb remount`):
+```bash
+adb root && adb remount
+adb push fixbssid /system/bin/fixbssid
+adb push fixbssid.rc /system/etc/init/fixbssid.rc
+adb shell chmod +x /system/bin/fixbssid
+```
+
 ---
 
 ## 3. Bloatware desabilitado
