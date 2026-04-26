@@ -114,6 +114,14 @@ for pkg in \
 done
 ```
 
+### ⚠️ Atenção antes de desabilitar
+Desabilitar pacotes em excesso causa boot loop e força factory reset. Proceder **um pacote por vez**, com reboot entre cada um para identificar o causador. Pacotes confirmados como problemáticos:
+- `com.android.server.telecom`
+- `com.android.providers.telephony`
+- `com.softwinner.miracastReceiver`
+
+**Estado atual (estável):** apenas `com.android.nfc` desabilitado (padrão de fábrica). Operar assim por alguns dias antes de qualquer nova intervenção.
+
 ### Serviços desnecessários no TV stick
 ```bash
 for pkg in \
