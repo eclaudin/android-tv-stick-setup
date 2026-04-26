@@ -51,7 +51,7 @@ adb shell su -c "cp /sdcard/WifiConfigStore.xml /data/misc/wifi/WifiConfigStore.
 adb shell su -c "svc wifi disable" && sleep 2 && adb shell su -c "svc wifi enable"
 ```
 
-> **Atenção:** O Android pode sobrescrever o `WifiConfigStore.xml` após reboot. Se o stick migrar para o 5GHz novamente, repita o procedimento com o modo IoT do roteador ativo.
+> **Atenção:** O Android ignora o BSSID fixado e faz roaming automático para o 5GHz sempre que ele estiver disponível — mesmo com SSID broadcast desabilitado, pois a rede fica salva no dispositivo. A solução definitiva é **desativar a banda 5GHz no roteador**. Com o 5GHz fora, o stick permanece estável no 2.4GHz com sinal excelente (RSSI ~-17).
 
 ### Verificar se está no 2.4GHz
 ```bash
